@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		92C3D0F617E2398D00C0AFE1 /* Opentok.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E409160217E233C300346C2F /* Opentok.framework */; };
 		92C3D0F717E2399800C0AFE1 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E409160017E233BB00346C2F /* Firebase.framework */; };
-		92C3D0F917E239E900C0AFE1 /* opentok.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 92C3D0F817E239E900C0AFE1 /* opentok.bundle */; };
+		92C3D0FB17E23E2000C0AFE1 /* opentok.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 92C3D0FA17E23E2000C0AFE1 /* opentok.bundle */; };
 		E423F47F17BC4D48007F17DF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F47E17BC4D48007F17DF /* UIKit.framework */; };
 		E423F48117BC4D48007F17DF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F48017BC4D48007F17DF /* Foundation.framework */; };
 		E423F48317BC4D48007F17DF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F48217BC4D48007F17DF /* CoreGraphics.framework */; };
@@ -61,7 +61,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		92C3D0F817E239E900C0AFE1 /* opentok.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = opentok.bundle; sourceTree = "<group>"; };
+		92C3D0FA17E23E2000C0AFE1 /* opentok.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = opentok.bundle; path = Opentok.framework/Versions/A/Resources/opentok.bundle; sourceTree = SOURCE_ROOT; };
 		E409160017E233BB00346C2F /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
 		E409160217E233C300346C2F /* Opentok.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Opentok.framework; sourceTree = "<group>"; };
 		E423F47B17BC4D48007F17DF /* webrtcDemoiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = webrtcDemoiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -219,7 +219,7 @@
 		E423F48517BC4D48007F17DF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				92C3D0F817E239E900C0AFE1 /* opentok.bundle */,
+				92C3D0FA17E23E2000C0AFE1 /* opentok.bundle */,
 				E4EA156617DC9CAF0069B603 /* TBBlue.png */,
 				E4EA156417DC9ABF0069B603 /* TBRed.png */,
 				E4A4640D17DC28DC00AA4FE9 /* fonts */,
@@ -333,7 +333,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92C3D0F917E239E900C0AFE1 /* opentok.bundle in Resources */,
+				92C3D0FB17E23E2000C0AFE1 /* opentok.bundle in Resources */,
 				E4EA156317DC874E0069B603 /* Avant Garde Book BT.ttf in Resources */,
 				E423F48917BC4D48007F17DF /* InfoPlist.strings in Resources */,
 				E423F49117BC4D48007F17DF /* Default.png in Resources */,
