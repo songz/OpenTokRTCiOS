@@ -498,6 +498,7 @@
 					"\\\"$(SRCROOT)/opentok-ios-sdk-webrtc\\\"",
 					"\\\"$(SRCROOT)/..\\\"",
 					/Users/song/CloudStorage/Dropbox/Tokbox/Code/demos/webrtcDemoiOS,
+					"\"$(SRCROOT)/Firebase.framework\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "webrtcDemoiOS/webrtcDemoiOS-Prefix.pch";
@@ -515,6 +516,7 @@
 					"\\\"$(SRCROOT)/opentok-ios-sdk-webrtc\\\"",
 					"\\\"$(SRCROOT)/..\\\"",
 					/Users/song/CloudStorage/Dropbox/Tokbox/Code/demos/webrtcDemoiOS,
+					"\"$(SRCROOT)/Firebase.framework\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "webrtcDemoiOS/webrtcDemoiOS-Prefix.pch";
