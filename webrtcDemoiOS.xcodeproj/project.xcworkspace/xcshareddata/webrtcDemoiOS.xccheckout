@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>748B558F-ED5A-4F26-8446-877298B21922</string>
+	<key>IDESourceControlProjectName</key>
+	<string>webrtcDemoiOS</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>560B918F-02E2-42D3-9E95-09A3AFE5D287</key>
+		<string>ssh://github.com/songz/OpenTokRTCiOS.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>webrtcDemoiOS.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>560B918F-02E2-42D3-9E95-09A3AFE5D287</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/songz/OpenTokRTCiOS.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>560B918F-02E2-42D3-9E95-09A3AFE5D287</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>560B918F-02E2-42D3-9E95-09A3AFE5D287</string>
+			<key>IDESourceControlWCCName</key>
+			<string>webrtcDemoiOS</string>
+		</dict>
+	</array>
+</dict>
+</plist>

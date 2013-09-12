@@ -28,6 +28,7 @@
 
 @end
 
+
 @implementation RoomViewController
 
 @synthesize rid, chatInput, chatTable, chatData, myPickerView, userSelectButton, usersPickerView, selectUserButton, videoContainerView;
@@ -35,6 +36,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+ 
+
+    set_ot_log_level(5);
     
     NSLog(@"viewDidLoad fired man!");
     // setup
