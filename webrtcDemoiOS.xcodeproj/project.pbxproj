@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E409160117E233BB00346C2F /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E409160017E233BB00346C2F /* Firebase.framework */; };
+		E409160317E233C300346C2F /* Opentok.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E409160217E233C300346C2F /* Opentok.framework */; };
+		E409160517E233CA00346C2F /* opentok.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E409160417E233CA00346C2F /* opentok.bundle */; };
 		E423F47F17BC4D48007F17DF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F47E17BC4D48007F17DF /* UIKit.framework */; };
 		E423F48117BC4D48007F17DF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F48017BC4D48007F17DF /* Foundation.framework */; };
 		E423F48317BC4D48007F17DF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F48217BC4D48007F17DF /* CoreGraphics.framework */; };
@@ -37,9 +40,6 @@
 		E423F4D217BC4DE2007F17DF /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F4C417BC4DE2007F17DF /* libstdc++.dylib */; };
 		E423F4D317BC4DE2007F17DF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F4C517BC4DE2007F17DF /* QuartzCore.framework */; };
 		E423F4D417BC4DE2007F17DF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F4C617BC4DE2007F17DF /* AVFoundation.framework */; };
-		E423F4D617BC4E30007F17DF /* Opentok.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F4D517BC4E30007F17DF /* Opentok.framework */; };
-		E423F4D817BC4E3E007F17DF /* opentok.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E423F4D717BC4E3E007F17DF /* opentok.bundle */; };
-		E423F4DA17BC4EA9007F17DF /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F4D917BC4EA9007F17DF /* Firebase.framework */; };
 		E423F4DC17BC4EDA007F17DF /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F4DB17BC4EDA007F17DF /* libicucore.dylib */; };
 		E423F4FC17BC5318007F17DF /* RoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E423F4FB17BC5318007F17DF /* RoomViewController.m */; };
 		E423F53817C3C55E007F17DF /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E423F53717C3C55E007F17DF /* ChatCell.m */; };
@@ -61,6 +61,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E409160017E233BB00346C2F /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
+		E409160217E233C300346C2F /* Opentok.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Opentok.framework; sourceTree = "<group>"; };
+		E409160417E233CA00346C2F /* opentok.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = opentok.bundle; sourceTree = "<group>"; };
 		E423F47B17BC4D48007F17DF /* webrtcDemoiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = webrtcDemoiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E423F47E17BC4D48007F17DF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E423F48017BC4D48007F17DF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -97,9 +100,6 @@
 		E423F4C417BC4DE2007F17DF /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 		E423F4C517BC4DE2007F17DF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E423F4C617BC4DE2007F17DF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		E423F4D517BC4E30007F17DF /* Opentok.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Opentok.framework; path = "opentok-ios-sdk-webrtc/Opentok.framework"; sourceTree = "<group>"; };
-		E423F4D717BC4E3E007F17DF /* opentok.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = opentok.bundle; path = "opentok-ios-sdk-webrtc/Opentok.framework/Versions/A/Resources/opentok.bundle"; sourceTree = SOURCE_ROOT; };
-		E423F4D917BC4EA9007F17DF /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = ../Firebase.framework; sourceTree = "<group>"; };
 		E423F4DB17BC4EDA007F17DF /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		E423F4FA17BC5318007F17DF /* RoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomViewController.h; sourceTree = "<group>"; };
 		E423F4FB17BC5318007F17DF /* RoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomViewController.m; sourceTree = "<group>"; };
@@ -117,6 +117,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E423F4DC17BC4EDA007F17DF /* libicucore.dylib in Frameworks */,
+				E409160317E233C300346C2F /* Opentok.framework in Frameworks */,
 				E423F47F17BC4D48007F17DF /* UIKit.framework in Frameworks */,
 				E423F48117BC4D48007F17DF /* Foundation.framework in Frameworks */,
 				E423F48317BC4D48007F17DF /* CoreGraphics.framework in Frameworks */,
@@ -127,6 +128,7 @@
 				E423F4CB17BC4DE2007F17DF /* CoreMedia.framework in Frameworks */,
 				E423F4CC17BC4DE2007F17DF /* Security.framework in Frameworks */,
 				E423F4CD17BC4DE2007F17DF /* AudioToolbox.framework in Frameworks */,
+				E409160117E233BB00346C2F /* Firebase.framework in Frameworks */,
 				E423F4CE17BC4DE2007F17DF /* CoreAudio.framework in Frameworks */,
 				E423F4CF17BC4DE2007F17DF /* CoreVideo.framework in Frameworks */,
 				E423F4D017BC4DE2007F17DF /* OpenGLES.framework in Frameworks */,
@@ -134,8 +136,6 @@
 				E423F4D217BC4DE2007F17DF /* libstdc++.dylib in Frameworks */,
 				E423F4D317BC4DE2007F17DF /* QuartzCore.framework in Frameworks */,
 				E423F4D417BC4DE2007F17DF /* AVFoundation.framework in Frameworks */,
-				E423F4D617BC4E30007F17DF /* Opentok.framework in Frameworks */,
-				E423F4DA17BC4EA9007F17DF /* Firebase.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,7 +175,8 @@
 		E423F47D17BC4D48007F17DF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E423F4D517BC4E30007F17DF /* Opentok.framework */,
+				E409160217E233C300346C2F /* Opentok.framework */,
+				E409160017E233BB00346C2F /* Firebase.framework */,
 				E423F4B917BC4DE2007F17DF /* CoreTelephony.framework */,
 				E423F4BA17BC4DE2007F17DF /* MobileCoreServices.framework */,
 				E423F4BB17BC4DE2007F17DF /* CFNetwork.framework */,
@@ -188,7 +189,6 @@
 				E423F4C217BC4DE2007F17DF /* OpenGLES.framework */,
 				E423F4C317BC4DE2007F17DF /* libz.dylib */,
 				E423F4C417BC4DE2007F17DF /* libstdc++.dylib */,
-				E423F4D917BC4EA9007F17DF /* Firebase.framework */,
 				E423F4C517BC4DE2007F17DF /* QuartzCore.framework */,
 				E423F4C617BC4DE2007F17DF /* AVFoundation.framework */,
 				E423F47E17BC4D48007F17DF /* UIKit.framework */,
@@ -219,9 +219,9 @@
 		E423F48517BC4D48007F17DF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E409160417E233CA00346C2F /* opentok.bundle */,
 				E4EA156617DC9CAF0069B603 /* TBBlue.png */,
 				E4EA156417DC9ABF0069B603 /* TBRed.png */,
-				E423F4D717BC4E3E007F17DF /* opentok.bundle */,
 				E4A4640D17DC28DC00AA4FE9 /* fonts */,
 				E423F48617BC4D48007F17DF /* webrtcDemoiOS-Info.plist */,
 				E423F48717BC4D48007F17DF /* InfoPlist.strings */,
@@ -333,13 +333,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E409160517E233CA00346C2F /* opentok.bundle in Resources */,
 				E4EA156317DC874E0069B603 /* Avant Garde Book BT.ttf in Resources */,
 				E423F48917BC4D48007F17DF /* InfoPlist.strings in Resources */,
 				E423F49117BC4D48007F17DF /* Default.png in Resources */,
 				E423F49317BC4D48007F17DF /* Default@2x.png in Resources */,
 				E423F49517BC4D48007F17DF /* Default-568h@2x.png in Resources */,
 				E423F49817BC4D48007F17DF /* MainStoryboard.storyboard in Resources */,
-				E423F4D817BC4E3E007F17DF /* opentok.bundle in Resources */,
 				E4A4641117DC2A3300AA4FE9 /* AvantGarDemObl in Resources */,
 				E4EA156517DC9ABF0069B603 /* TBRed.png in Resources */,
 				E4EA156717DC9CAF0069B603 /* TBBlue.png in Resources */,
@@ -495,8 +495,9 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/opentok-ios-sdk-webrtc\"",
-					"\"$(SRCROOT)/..\"",
+					"\\\"$(SRCROOT)/opentok-ios-sdk-webrtc\\\"",
+					"\\\"$(SRCROOT)/..\\\"",
+					/Users/song/CloudStorage/Dropbox/Tokbox/Code/demos/webrtcDemoiOS,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "webrtcDemoiOS/webrtcDemoiOS-Prefix.pch";
@@ -511,8 +512,9 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/opentok-ios-sdk-webrtc\"",
-					"\"$(SRCROOT)/..\"",
+					"\\\"$(SRCROOT)/opentok-ios-sdk-webrtc\\\"",
+					"\\\"$(SRCROOT)/..\\\"",
+					/Users/song/CloudStorage/Dropbox/Tokbox/Code/demos/webrtcDemoiOS,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "webrtcDemoiOS/webrtcDemoiOS-Prefix.pch";
