@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="cPH-Y2-GFm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4504" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="cPH-Y2-GFm">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3734.1"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -34,23 +34,25 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2" id="Fq3-Jh-GRe"/>
+                                </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wOT-Bq-X08">
                                 <rect key="frame" x="218" y="251" width="82" height="42"/>
-                                <color key="backgroundColor" red="0.92941182850000004" green="0.92941182850000004" blue="0.92941182850000004" alpha="1" colorSpace="deviceRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="82" id="d5W-Fa-Yzq"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Submit">
-                                    <color key="titleColor" red="0.019607843831181526" green="0.015686275437474251" blue="0.015686275437474251" alpha="1" colorSpace="deviceRGB"/>
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="highlighted">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="SubmitButton:" destination="2" eventType="touchUpInside" id="fUN-gW-6l7"/>
                                     <segue destination="7vL-Wq-Mad" kind="push" identifier="startChat" id="ylA-YL-ud9"/>
                                 </connections>
                             </button>
@@ -105,9 +107,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3wS-jW-XvE">
+                                <rect key="frame" x="20" y="20" width="193" height="44"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="193" id="IO4-Xf-SQU"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="User 2013">
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="startSelection:" destination="7vL-Wq-Mad" eventType="touchUpInside" id="osG-pg-gWJ"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ov-IT-lrX">
                                 <rect key="frame" x="228" y="20" width="72" height="44"/>
-                                <color key="backgroundColor" red="0.92941182850000004" green="0.92941182850000004" blue="0.92941182850000004" alpha="1" colorSpace="deviceRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="72" id="UQg-CT-TIk"/>
                                 </constraints>
@@ -124,7 +144,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LIY-NU-Dbw">
-                                <rect key="frame" x="20" y="509" width="280" height="30"/>
+                                <rect key="frame" x="20" y="520" width="280" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -146,8 +166,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="169"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" lineBreakMode="wordWrap" numberOfLines="20" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="lIV-rk-DPX">
-                                                    <rect key="frame" x="20" y="12" width="280" height="145"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="wordWrap" numberOfLines="20" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="lIV-rk-DPX">
+                                                    <rect key="frame" x="20" y="20" width="280" height="137"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -155,8 +175,9 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="lIV-rk-DPX" firstAttribute="top" secondItem="i2q-Td-TLz" secondAttribute="top" constant="12" id="4KB-Hh-bHK"/>
+                                                <constraint firstItem="lIV-rk-DPX" firstAttribute="top" secondItem="i2q-Td-TLz" secondAttribute="top" constant="20" id="4KB-Hh-bHK"/>
                                                 <constraint firstAttribute="bottom" secondItem="lIV-rk-DPX" secondAttribute="bottom" constant="12" id="JFS-Me-9zl"/>
+                                                <constraint firstItem="lIV-rk-DPX" firstAttribute="leading" secondItem="i2q-Td-TLz" secondAttribute="leading" constant="20" id="xiz-SX-YCn"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.51372549020000002" green="0.73725490199999999" blue="0.81568627449999997" alpha="1" colorSpace="deviceRGB"/>
@@ -170,24 +191,6 @@
                                     <outlet property="delegate" destination="7vL-Wq-Mad" id="Qsd-I0-7tM"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3wS-jW-XvE">
-                                <rect key="frame" x="20" y="20" width="193" height="44"/>
-                                <color key="backgroundColor" red="0.92941182850000004" green="0.92941182850000004" blue="0.92941182850000004" alpha="1" colorSpace="deviceRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="193" id="IO4-Xf-SQU"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="User 2013">
-                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="startSelection:" destination="7vL-Wq-Mad" eventType="touchUpInside" id="osG-pg-gWJ"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fac-2Z-lf2">
                                 <rect key="frame" x="20" y="72" width="280" height="193"/>
                                 <subviews>
@@ -228,17 +231,21 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="216" id="efe-NT-9GU"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="dataSource" destination="7vL-Wq-Mad" id="rek-Cu-cBX"/>
+                                    <outlet property="delegate" destination="7vL-Wq-Mad" id="iVc-Dt-BoG"/>
+                                </connections>
                             </pickerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mYH-dv-e4a">
                                 <rect key="frame" x="83" y="394" width="153" height="44"/>
-                                <color key="backgroundColor" red="0.92941182850000004" green="0.92941182850000004" blue="0.92941182850000004" alpha="1" colorSpace="deviceRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="8E7-gM-8hH"/>
                                     <constraint firstAttribute="width" constant="153" id="yk3-wT-qdR"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Subscribe to User">
-                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="highlighted">
@@ -273,7 +280,7 @@
                             <constraint firstAttribute="trailing" secondItem="7Ov-IT-lrX" secondAttribute="trailing" constant="20" symbolic="YES" id="opY-8t-6ET"/>
                             <constraint firstItem="yOA-PE-9Bd" firstAttribute="leading" secondItem="GTG-X7-mdD" secondAttribute="leading" id="rWR-rP-Bys"/>
                             <constraint firstAttribute="trailing" secondItem="fac-2Z-lf2" secondAttribute="trailing" constant="20" symbolic="YES" id="t0d-WV-3Ma"/>
-                            <constraint firstItem="LIY-NU-Dbw" firstAttribute="top" secondItem="A65-hj-7fN" secondAttribute="bottom" constant="8" symbolic="YES" id="tNT-n5-nlq"/>
+                            <constraint firstItem="LIY-NU-Dbw" firstAttribute="top" secondItem="A65-hj-7fN" secondAttribute="bottom" constant="19" id="tNT-n5-nlq"/>
                             <constraint firstItem="A65-hj-7fN" firstAttribute="top" secondItem="GTG-X7-mdD" secondAttribute="top" constant="273" id="tom-w4-jFX"/>
                             <constraint firstItem="yOA-PE-9Bd" firstAttribute="trailing" secondItem="GTG-X7-mdD" secondAttribute="trailing" id="tz6-Af-e5n"/>
                         </constraints>

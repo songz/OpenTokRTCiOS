@@ -28,6 +28,7 @@
 
 @end
 
+
 @implementation RoomViewController
 
 @synthesize rid, chatInput, chatTable, chatData, myPickerView, userSelectButton, usersPickerView, selectUserButton, videoContainerView;
@@ -35,10 +36,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //set_ot_log_level(5);
     
-    NSLog(@"viewDidLoad fired man!");
-    // setup
-    [self.navigationController setNavigationBarHidden:YES];
+    // listen to keyboard events
     [self registerForKeyboardNotifications];
     
     // initialize constants
@@ -47,94 +47,34 @@
     connections= [[NSMutableArray alloc] init];
     chatData = [[NSMutableArray alloc] init];
     
-    myPickerView.delegate = self;
-    myPickerView.dataSource = self;
+    // add subviews to stream picker for user to pick streams to subscribe to
     [usersPickerView addSubview:myPickerView];
     [usersPickerView addSubview:selectUserButton];
     [usersPickerView setAlpha:0.0];
     
     // generate current user's name
     NSDate* date = [NSDate date];
-    userName = [[NSString alloc] initWithFormat:@"iOS%d", (int)[date timeIntervalSince1970] % 1000000];
+    userName = [[NSString alloc] initWithFormat:@"iOS-%d", (int)[date timeIntervalSince1970] % 1000000];
     [userSelectButton.titleLabel setText: userName];
     
-    // Tap to resign first responder
+    // listen to taps around the screen, and hide keyboard when necessary
     UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
     tgr.delegate = self;
     [self.view addGestureRecognizer:tgr];
     
-    
+    // set up look of the page
+    [self.navigationController setNavigationBarHidden:YES];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"TBBlue.png"]];
-    
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
-- (void) setupVideo {
+- (void)viewDidUnload{
+    [super viewDidUnload];
+    [self freeKeyboardNotifications];
+}
 
-    CGFloat containerWidth = CGRectGetWidth( videoContainerView.bounds );
-    CGFloat containerHeight = CGRectGetHeight( videoContainerView.bounds );
-    
-    publisher = [[OTPublisher alloc] initWithDelegate:self];
-    [publisher.view setFrame:CGRectMake( containerWidth-90, containerHeight-60, 100, 75)];
-    [videoContainerView addSubview:publisher.view];
-    
-    NSLog(@"setup video");
-    NSLog(@"setup video");
-    NSLog(@"setup video");
-    NSLog(@"setup video");
-    NSLog(@"-------------");
-  
-    // Connect to OpenTok session
-    _session = [[OTSession alloc] initWithSessionId: [roomInfo objectForKey:@"sid"] delegate:self];
-    [_session connectWithApiKey: [roomInfo objectForKey:@"apiKey"] token:[roomInfo objectForKey:@"token"]];
-    
-    // Define firebase refs
-    NSString* roomUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/", rid];
-    Firebase* roomRef = [[Firebase alloc] initWithUrl: roomUrl];
-    NSString* chatUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/chat/", rid];
-    chatRef = [[Firebase alloc] initWithUrl: chatUrl];
-    NSString* usersUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/users/", rid];
-    usersRef = [[Firebase alloc] initWithUrl: usersUrl];
-    
-    // make sure roomRef has session id
-    [[roomRef childByAppendingPath:@"sid"] setValue: [roomInfo objectForKey:@"sid"]];
-    
-    // new chat messages
-    [chatRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        // Add the chat message to the array.
-        [chatData addObject:snapshot.value];
-        
-        // Reload the table view so the new message will show up.
-        [chatTable reloadData];
-        if (chatTable.contentSize.height > chatTable.frame.size.height){
-            CGPoint offset = CGPointMake(0, chatTable.contentSize.height - chatTable.frame.size.height);
-            [chatTable setContentOffset:offset animated:YES];
-        }
-    }];
-    
-    
-    [usersRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot){
-        NSString* name = [[snapshot childSnapshotForPath:@"name"] value];
-        NSString* cid = [snapshot name];
-        if(cid){
-            [roomUsers setValue:name forKey:cid];
-            NSLog(@"child added: %@", roomUsers);
-        }
-    }];
-    [usersRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot){
-        NSString* name = [snapshot name];
-        [roomUsers removeObjectForKey: name];
-        NSLog(@"child added: %@", roomUsers);
-    }];
-    [usersRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot){
-        NSString* name = [[snapshot childSnapshotForPath:@"name"] value];
-        NSString* cid = [snapshot name];
-        if(cid){
-            [roomUsers setValue:name forKey:cid];
-            [myPickerView reloadAllComponents];
-            NSLog(@"child changed: %@", roomUsers);
-        }
-    }];
-    
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -150,17 +90,94 @@
         }
         else{
             roomInfo = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-            [self setupVideo];
+            [self setupRoom];
         }
     }];
 }
 
-- (void)viewDidUnload{
-    [super viewDidUnload];
-    [self freeKeyboardNotifications];
+
+- (void) setupRoom {
+    // get screen bounds
+    CGFloat containerWidth = CGRectGetWidth( videoContainerView.bounds );
+    CGFloat containerHeight = CGRectGetHeight( videoContainerView.bounds );
+    
+    // create publisher and style publisher
+    publisher = [[OTPublisher alloc] initWithDelegate:self];
+    float diameter = 100.0;
+    [publisher.view setFrame:CGRectMake( containerWidth-90, containerHeight-60, diameter, diameter)];
+    publisher.view.layer.cornerRadius = diameter/2.0;
+    [videoContainerView addSubview:publisher.view];
+    
+    // add pan gesture to publisher
+    UIPanGestureRecognizer *pgr = [[UIPanGestureRecognizer alloc]
+                                   initWithTarget:self action:@selector(handlePan:)];
+    [publisher.view addGestureRecognizer:pgr];
+    pgr.delegate = self;
+    publisher.view.userInteractionEnabled = YES;
+    
+    // Connect to OpenTok session
+    _session = [[OTSession alloc] initWithSessionId: [roomInfo objectForKey:@"sid"] delegate:self];
+    [_session connectWithApiKey: [roomInfo objectForKey:@"apiKey"] token:[roomInfo objectForKey:@"token"]];
+    
+    // Define firebase refs
+    NSString* roomUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/", rid];
+    Firebase* roomRef = [[Firebase alloc] initWithUrl: roomUrl];
+    NSString* chatUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/chat/", rid];
+    chatRef = [[Firebase alloc] initWithUrl: chatUrl];
+    NSString* usersUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/users/", rid];
+    usersRef = [[Firebase alloc] initWithUrl: usersUrl];
+    
+    // make sure firebase room reference has a session id
+    [[roomRef childByAppendingPath:@"sid"] setValue: [roomInfo objectForKey:@"sid"]];
+    
+    // new chat messages
+    [chatRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        // Add the chat message to the array.
+        [chatData addObject:snapshot.value];
+        
+        // Reload the table view so the new message will show up.
+        [chatTable reloadData];
+        
+        // scroll down chat table if content is longer than view
+        if (chatTable.contentSize.height > chatTable.frame.size.height){
+            CGPoint offset = CGPointMake(0, chatTable.contentSize.height - chatTable.frame.size.height);
+            [chatTable setContentOffset:offset animated:YES];
+        }
+    }];
+    
+    // new user has joined the room
+    [usersRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot){
+        NSString* name = [[snapshot childSnapshotForPath:@"name"] value];
+        NSString* cid = [snapshot name];
+        if(cid){
+            [roomUsers setValue:name forKey:cid];
+        }
+    }];
+    
+    // users have left the room
+    [usersRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot){
+        NSString* name = [snapshot name];
+        [roomUsers removeObjectForKey: name];
+    }];
+    
+    // user's name has changed
+    [usersRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot){
+        NSString* name = [[snapshot childSnapshotForPath:@"name"] value];
+        NSString* cid = [snapshot name];
+        if(cid){
+            [roomUsers setValue:name forKey:cid];
+            [myPickerView reloadAllComponents];
+            NSLog(@"child changed: %@", roomUsers);
+        }
+    }];
+    
 }
 
+
 #pragma mark - Gestures
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return YES;
+}
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     if ([touch.view isKindOfClass:[UITextField class]]) {
@@ -168,19 +185,25 @@
     }else{
         [self.chatInput resignFirstResponder];
     }
-    return YES; // do whatever u want here
+    return YES;
 }
 - (void)viewTapped:(UITapGestureRecognizer *)tgr
 {
-    NSLog(@"view tapped");
-    // remove keyboard
 }
+- (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer{
+    NSLog(@"I'm freaking panning the publisher!");
+    CGPoint translation = [recognizer translationInView:publisher.view];
+    recognizer.view.center = CGPointMake(recognizer.view.center.x + translation.x,
+                                         recognizer.view.center.y + translation.y);
+    [recognizer setTranslation:CGPointMake(0, 0) inView:publisher.view];
+}
+
 
 
 #pragma mark - OpenTok Session
 - (void)sessionDidConnect:(OTSession*)session
 {
-    // set user's presence in the room
+    // set user's presence in the room and publish video into session
     NSString* presenceUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/users/%@", rid, session.connection.connectionId];
     presenceRef = [[Firebase alloc] initWithUrl: presenceUrl];
     [[presenceRef childByAppendingPath:@"name"] setValue: userName];
@@ -192,7 +215,6 @@
 - (void)sessionDidDisconnect:(OTSession*)session
 {
     // go back to join room, remove user's presence from room
-    
     [usersRef removeAllObservers];
     [chatRef removeAllObservers];
     [presenceRef removeValue];
@@ -203,15 +225,18 @@
 
 - (void)session:(OTSession*)mySession didReceiveStream:(OTStream*)stream
 {
+    // make sure we don't subscribe to ourselves
     if (![stream.connection.connectionId isEqualToString: _session.connection.connectionId] && !_subscriber){
         _subscriber = [[OTSubscriber alloc] initWithStream:stream delegate:self];
         
+        // get name of subscribed stream and set the button text to currently subscribed stream
         NSString* streamName = [roomUsers objectForKey: stream.connection.connectionId];
         if (!streamName) {
             streamName = stream.connection.connectionId;
         }
         [userSelectButton setTitle: streamName forState:UIControlStateNormal];
         
+        // set width/height of video container view
         CGFloat containerWidth = CGRectGetWidth( videoContainerView.bounds );
         CGFloat containerHeight = CGRectGetHeight( videoContainerView.bounds );
         [_subscriber.view setFrame:CGRectMake( 0, 0, containerWidth, containerHeight)];
@@ -220,7 +245,6 @@
     [allStreams setObject:stream forKey:stream.connection.connectionId];
     
     [connections addObject:stream.connection.connectionId];
-    NSLog(@"streams created, connections: %@", connections);
     [myPickerView reloadAllComponents];
 }
 
@@ -229,18 +253,23 @@
     
     [allStreams removeObjectForKey:stream.connection.connectionId];
     [connections removeObject:stream.connection.connectionId];
-    NSLog(@"streams destroyed, connections: %@", connections);
     [myPickerView reloadAllComponents];
 }
 
 - (void)session:(OTSession*)session didFailWithError:(OTError*)error {
     NSLog(@"sessionDidFail");
     [self showAlert:[NSString stringWithFormat:@"There was an error connecting to session %@", session.sessionId]];
+    
+    // leave room
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)publisher:(OTPublisher*)publisher didFailWithError:(OTError*) error {
     NSLog(@"publisher didFailWithError %@", error);
     [self showAlert:[NSString stringWithFormat:@"There was an error publishing."]];
+    
+    // leave room
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Helper Methods
@@ -279,75 +308,12 @@
 }
 
 
--(void) registerForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-}
-
-
--(void) freeKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-}
-
-
--(void) keyboardWasShown:(NSNotification*)aNotification
-{
-    NSLog(@"Keyboard was shown");
-    NSDictionary* info = [aNotification userInfo];
-    
-    NSTimeInterval animationDuration;
-    UIViewAnimationCurve animationCurve;
-    CGRect keyboardFrame;
-    [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
-    [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
-    [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&keyboardFrame];
-    
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:animationDuration];
-    [UIView setAnimationCurve:animationCurve];
-    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y- keyboardFrame.size.height, self.view.frame.size.width, self.view.frame.size.height)];
-    
-    [UIView commitAnimations];
-    
-}
-
--(void) keyboardWillHide:(NSNotification*)aNotification
-{
-    NSLog(@"Keyboard will hide");
-    NSDictionary* info = [aNotification userInfo];
-    
-    NSTimeInterval animationDuration;
-    UIViewAnimationCurve animationCurve;
-    CGRect keyboardFrame;
-    [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
-    [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
-    [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&keyboardFrame];
-    
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:animationDuration];
-    [UIView setAnimationCurve:animationCurve];
-    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + keyboardFrame.size.height, self.view.frame.size.width, self.view.frame.size.height)];
-    
-    [UIView commitAnimations];
-}
-
 #pragma mark - ChatList
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [chatData count];
 }
 - (UITableViewCell*)tableView:(UITableView*)table cellForRowAtIndexPath:(NSIndexPath *)index
 {
-    
-    
-    
-    //WTF WTF I HATE IOS FML
-    // I GIVE UP
-    
-    
-    
     static NSString *CellIdentifier = @"chatCellIdentifier";
     ChatCell *cell = [table dequeueReusableCellWithIdentifier:CellIdentifier];
     
@@ -356,10 +322,6 @@
     // TODO: 260 comes from the width inside the storyboard
     CGSize maximumLabelSize = CGSizeMake(260, FLT_MAX);
     CGSize textSize = [chatMessage[@"text"] sizeWithFont:cell.textString.font constrainedToSize:maximumLabelSize lineBreakMode:cell.textString.lineBreakMode];
-    
-//    cell.userLabel.text = chatMessage[@"name"];
-    
-    
     
     // iOS6 and above : Use NSAttributedStrings
     const CGFloat fontSize = 13;
@@ -385,35 +347,25 @@
                                            attributes:subAttrs];
     [attributedText setAttributes:attrs range:range];
     
-    
-    
-    
+    // set cell string ond style
     cell.textString.attributedText = attributedText;
-    
-    
-    
-    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    
-    
     
     // adjust the label the the new height.
     CGRect newFrame = cell.textString.frame;
     newFrame.size.height = textSize.height;
-    //NSLog(@"new height is: %f", newFrame.size.height);
     cell.textString.frame = newFrame;
-    
     cell.textString.numberOfLines = 0;
     
+    //set cell background color
     cell.backgroundColor = [UIColor colorWithRed:0x83/255.0f
                                            green:0xBC/255.0f
                                             blue:0xD0/255.0f alpha:1];
     
+    CALayer * layer = [cell layer];
+    layer.masksToBounds = YES;
+    layer.cornerRadius = newFrame.size.height/2;
     
-    [cell.textString setBackgroundColor: [UIColor colorWithRed:0x83/255.0f
-                                                         green:0xBC/255.0f
-                                                          blue:0xD0/255.0f alpha:1]];
     return cell;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -421,8 +373,6 @@
     NSDictionary* chatMessage = [chatData objectAtIndex:indexPath.row];
     
     NSString* myString = chatMessage[@"text"];
-    
-    
     
     // Without creating a cell, just calculate what its height would be
     static int pointsAboveText = 12;
@@ -435,6 +385,7 @@
     
     return pointsAboveText + expectedLabelHeight + pointsBelowText;
 }
+
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)path
 {
     return nil;
@@ -495,10 +446,12 @@
     int row = [myPickerView selectedRowInComponent:0];
     NSLog(@"user picked row %d", row);
     
+    // retrieve stream from user selection
     NSString* streamName = [roomUsers objectForKey: [connections objectAtIndex:row]];
     [userSelectButton setTitle: streamName forState:UIControlStateNormal];
-    
     OTStream* stream = [allStreams objectForKey: [connections objectAtIndex:row]];
+    
+    // remove old subscriber and create new one
     [_subscriber close];
     _subscriber = [[OTSubscriber alloc] initWithStream:stream delegate:self];
     CGFloat containerWidth = CGRectGetWidth( videoContainerView.bounds );
@@ -513,4 +466,68 @@
     [usersPickerView setAlpha:0.0];
     [UIView commitAnimations];
 }
+
+
+
+
+#pragma mark - Keyboard notifications
+-(void) registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+
+-(void) freeKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
+
+-(void) keyboardWasShown:(NSNotification*)aNotification
+{
+    NSLog(@"Keyboard was shown");
+    NSDictionary* info = [aNotification userInfo];
+    
+    NSTimeInterval animationDuration;
+    UIViewAnimationCurve animationCurve;
+    CGRect keyboardFrame;
+    [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+    [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&keyboardFrame];
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    [UIView setAnimationCurve:animationCurve];
+    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y- keyboardFrame.size.height, self.view.frame.size.width, self.view.frame.size.height)];
+    
+    [UIView commitAnimations];
+    
+}
+
+-(void) keyboardWillHide:(NSNotification*)aNotification
+{
+    NSLog(@"Keyboard will hide");
+    NSDictionary* info = [aNotification userInfo];
+    
+    NSTimeInterval animationDuration;
+    UIViewAnimationCurve animationCurve;
+    CGRect keyboardFrame;
+    [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+    [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&keyboardFrame];
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    [UIView setAnimationCurve:animationCurve];
+    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + keyboardFrame.size.height, self.view.frame.size.width, self.view.frame.size.height)];
+    
+    [UIView commitAnimations];
+}
+
+
+
 @end
+
+
