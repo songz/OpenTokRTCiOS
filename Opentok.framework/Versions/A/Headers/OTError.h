@@ -23,7 +23,8 @@ typedef enum {
     OTP2PSessionRequired,           /* A peer-to-peer enabled session is required for WebRTC on iOS */
     OTP2PSessionMaxParticipants,    /* A peer-to-peer enabled session can only have two participants */
     OTSessionConnectionTimeout,     /* The connection timed out while attempting to connect to the session */
-    OTSessionCompatibilityMismatch  /* There was a mismatch with the session's capabilities. You're likely trying to connect iOS to a P2P Flash session on the web. */
+    OTSessionCompatibilityMismatch,  /* There was a mismatch with the session's capabilities. You're likely trying to connect iOS to a P2P Flash session on the web. */
+	OTSessionSignalConnection /* There was an error sending the signal. Make sure the session is connected, the data parameter is of type NSDictionary, NSString, NSNumber, NSNull, or NSArray. Also make sure you did not exceed 1KB for the type and 8KB for the data. */
     
 } OTSessionErrorCode;
 
@@ -61,10 +62,16 @@ typedef enum {
  * - `OTConnectionFailed` -- There was an error connecting to OpenTok services.
  * - `OTNoMessagingServer` -- No messaging server is available for this session.
  * - `OTSDKUpdateRequired` -- A new version of the OpenTok SDK is available and required to connect to this session.
+ * - `OTConnectionRefused` -- A socket could not be opened to the messaging server. Check that outbound ports 5560 or 8080 are accessible
+ * - `OTSessionStateFailed` -- The connection timed out while attempting to get the session's state
  * - `OTP2PSessionUnsupported` -- iOS does not currently support peer-to-peer OpenTok sessions.
  * - `OTUnknownServerError` -- The client was unable to communicate with the server, possibly due to a version incompatibility
  * - `OTP2PSessionRequired` -- A peer-to-peer enabled session is required to use this SDK
  * - `OTP2PSessionMaxParticipants` -- A peer-to-peer enabled session can only have two participants
+ * - `OTSessionConnectionTimeout` -- The connection timed out while attempting to connect to the session
+ * - `OTSessionCompatibilityMismatch` -- There was a mismatch with the session's capabilities. You're likely trying to connect iOS to
+ * - `a P2P Flash session on the web.
+ * - `OTSessionSignalConnection` -- There was an error sending the signal. Make sure the session is connected, the data parameter is of type NSDictionary, NSString, NSNumber, NSNull, or NSArray. Also make sure you did not exceed 1KB for the type and 8KB for the data.
  *
  *  The `OTSubscriberErrorCode` enum defines values for the `code` property of the OTError object for errors
  * related to methods of the OTSubscriber class:
