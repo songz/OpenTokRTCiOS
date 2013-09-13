@@ -41,6 +41,11 @@
     // set up the look of the page
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"TBRed.png"]];
     [self.navigationController setNavigationBarHidden:YES];
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)viewDidUnload{

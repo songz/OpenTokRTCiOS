@@ -10,6 +10,7 @@
 #import <Firebase/Firebase.h>
 #import <Opentok/Opentok.h>
 #import "ChatCell.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface RoomViewController : UIViewController <OTSessionDelegate, OTSubscriberDelegate, OTPublisherDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
