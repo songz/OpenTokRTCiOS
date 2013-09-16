@@ -161,4 +161,13 @@
  */
 - (void)stream:(OTStream*)stream didChangeVideoDimensions:(CGSize)dimensions;
 
+/**
+ * This message is sent when the OpenTok media server stops sending video to the subscriber.
+ * This feature of the OpenTok media server has a subscriber drop the video stream when connectivity degrades.
+ * The subscriber continues to receive the audio stream, if there is one.
+ *
+ * @param subscriber The <OTSubscriber> that will no longer receive video.
+ */
+- (void)subscriberVideoDisabled:(OTSubscriber*)subscriber;
+
 @end

@@ -36,7 +36,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //set_ot_log_level(5);
+    set_ot_log_level(5);
     
     // listen to keyboard events
     [self registerForKeyboardNotifications];
@@ -116,6 +116,10 @@
     publisher.view.userInteractionEnabled = YES;
     
     // Connect to OpenTok session
+    NSLog(@"room info: %@", roomInfo);
+    NSLog(@"room info: %@", roomInfo);
+    NSLog(@"room info: %@", roomInfo);
+    NSLog(@"room info: %@", roomInfo);
     _session = [[OTSession alloc] initWithSessionId: [roomInfo objectForKey:@"sid"] delegate:self];
     [_session connectWithApiKey: [roomInfo objectForKey:@"apiKey"] token:[roomInfo objectForKey:@"token"]];
     

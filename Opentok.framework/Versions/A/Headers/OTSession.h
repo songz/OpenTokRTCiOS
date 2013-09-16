@@ -38,10 +38,10 @@ typedef enum {
 /**
  * The first step in using the OpenTok iOS SDK is to initialize
  * an OTSession object with a valid
- * [session ID](http://www.tokbox.com/opentok/docs/concepts/session%5Fcreation.html). 
+ * [session ID]( http://tokbox.com/opentok/tutorials/create-session )
  * Use the OTSession object to connect to OpenTok using your developer
  * [API key](https://dashboard.tokbox.com/projects) and a valid
- * [token](http://www.tokbox.com/opentok/docs/concepts/token%5Fcreation.html).
+ * [token]( http://tokbox.com/opentok/tutorials/create-token )
  */
 @interface OTSession : NSObject
 
@@ -66,7 +66,7 @@ typedef enum {
 @property(readonly) OTSessionConnectionStatus sessionConnectionStatus;
 
 /**
- * The [session ID](http://www.tokbox.com/opentok/docs/concepts/session%5Fcreation.html)
+ * The [session ID]( http://tokbox.com/opentok/tutorials/create-session )
  * of this instance. Once initialized, this is an immutable value.
  */
 @property(nonatomic, copy) NSString* sessionId;
@@ -98,7 +98,7 @@ typedef enum {
 /** @name Initializing and connecting to a session */
 
 /**
- * Initialize this session with a given [session ID](http://www.tokbox.com/opentok/docs/concepts/session%5Fcreation.html)
+ * Initialize this session with a given [session ID]( http://tokbox.com/opentok/tutorials/create-session )
  * and delegate before connecting to OpenTok. Send the <[OTSession connectWithApiKey:token:]> message
  * to connect to the session.
  *
@@ -113,7 +113,7 @@ typedef enum {
 
 
 /**
- * Once your application has a valid [token](http://www.tokbox.com/opentok/docs/concepts/token%5Fcreation.html),
+ * Once your application has a valid [token]( http://tokbox.com/opentok/tutorials/create-token ),
  * connect with your [API key](https://dashboard.tokbox.com/projects) to begin participating in an OpenTok session.
  *
  * When the session connects successfully, the <[OTSessionDelegate sessionDidConnect:]> message is sent to
@@ -127,7 +127,7 @@ typedef enum {
  *
  * Note that sessions automatically disconnect when the app is suspended. 
  *
- * Be sure to set up a delegate method for the [OTSessionDelegate session: didFailWithError:] message. See the 
+ * Be sure to set up a delegate method for the [OTSessionDelegate session:didFailWithError:] message. See the 
  * OTSessionErrorCode emum defined in OTError.h. It defines code values for the error. An error with code
  * OTSDKUpdateRequired indicates that the OpenTok iOS SDK used to compile the app is not longer compatible
  * with the OpenTok infrastructure.
@@ -179,11 +179,69 @@ typedef enum {
  *
  * Upon removing the publisher, the <[OTPublisherDelegate publisherDidStopStreaming:]> message is sent
  * to the publisher's delegate. The publisher's view is removed from its superview. Also, the
- * [OTSessionDelegate session:didDropStream:] message is sent to the session's delegate.
+ * <[OTSessionDelegate session:didDropStream:]> message is sent to the session's delegate.
  *
  * @param publisher The <OTPublisher> object to remove from the session.
  */
 - (void)unpublish:(OTPublisher*) publisher;
+
+/** @name Sending and receiving signals in a session */
+
+/**
+ * Sends a signal to every client connected to the session.
+ * 
+ * Calling this method will result in multiple signals sent (one to each client in the session). For information on
+ * charges for signaling, see the [OpenTok pricing](http://tokbox.com/pricing) page.
+ * 
+ * See: <[OTSession signalWithType:data:connections:completionHandler:]> and <[OTSession receiveSignalType:withHandler:]>.
+ *
+ * @param type The type of the signal. You also specify the type when you call the <[OTSession receiveSignalType:withHandler:]>
+ * method.
+ * @param data The data to send. Valid types for data are a JSON-parsable NSDictionary, a JSON-parsable NSArray, an NSString,
+ * an NSNumber, or NSNull. Numbers cannot be NaN or infinity. The limit to the size of data is 8kB.
+ * @param handler The block to handle success or failure. In the case of success, is the error parameter set to null. 
+ * In the case of failure, is error parameter is set to OTSessionSignalConnection, defined in the OTSessionErrorCode enum.
+ */
+- (void) signalWithType:(NSString*) type
+				   data:(id) data
+	  completionHandler:(void (^)(NSError* error)) handler;
+
+/**
+ * Sends a signal to one or more clients in a session.
+ *
+ * For information on charges for signaling, see the [OpenTok pricing](http://tokbox.com/pricing) page.
+ *
+ * See: <[OTSession signalWithType:data:completionHandler:]> and <[OTSession receiveSignalType:withHandler:]>.
+ *
+ * @param type The type of the signal. You also specify the type when you call the <[OTSession receiveSignalType:withHandler:]>
+ * method. 
+ * @param data The data to send. Valid types for data are a JSON-parsable NSDictionary, a JSON-parsable NSArray, an NSString,
+ * an NSNumber, or NSNull. Numbers cannot be NaN or infinity. The limit to the size of data is 8kB.
+ * @param connections An array of OTConnection objects. Each OTConnection object represents the connection of a client to the session.
+ * These are the clients to which the message is sent. (See <[OTSessionDelegate session:didCreateConnection:]> and <OTConnection>.)
+ * @param handler Block to handle success or failure. In the case of success, is the error parameter set to null. 
+ * In the case of failure, is error parameter is set to OTSessionSignalConnection, defined in the OTSessionErrorCode enum.
+ */
+- (void) signalWithType:(NSString*) type
+				   data:(id) data
+			connections:(NSArray*) connections
+	  completionHandler:(void (^)(NSError* error)) handler;
+/**
+ * Receive a signal from the session using a block handler
+ *
+ * This method sets the block to receive a signal from the session. To receive
+ * all messages sent to the session pass an empty string as the `type` parameter
+ *
+ * See: <[OTSession signalWithType:data:completionHandler:]> and <[OTSession signalWithType:data:connections:completionHandler:]>.
+ *
+ * @param type Type of signal to be received. Must not be nil.
+ * @param handler The block handling the session. Must not be NULL. The `type` parameter passed to the handler defines
+ * the signal type. The `data` parameter is the data of the signal. The `fromConnection` parameter is the OTConnection
+ * object corresponding the the user's connection.
+ * @result BOOL YES if successful.
+ */
+- (BOOL) receiveSignalType:(NSString*) type
+			   withHandler:(void (^)(NSString* type, id data, OTConnection* fromConnection)) handler;
 
 @end
 
@@ -197,14 +255,14 @@ typedef enum {
 /** @name Connecting to a session */
 
 /**
- * Sent when the session connects.
+ * Sent when the client connects to the session.
  *
  * @param session The <OTSession> instance that sent this message.
  */
 - (void)sessionDidConnect:(OTSession*)session;
 
 /**
- * Sent when the session disconnects.
+ * Sent when the client disconnects from the session.
  *
  * When a session disconnects, all <OTSubscriber> and <OTPublisher> objects' views are
  * removed from their superviews.
@@ -255,5 +313,32 @@ typedef enum {
  * @param stream The stream associated with this event.
  */
 - (void)session:(OTSession*)session didDropStream:(OTStream*)stream;
+
+/** @name Monitoring connections in a session */
+
+/**
+ * Sent when other client connects to the session. The `connection` object represents the client's
+ * connection to the session.
+ *
+ * This message is not sent when your own client connects to the session. The <[OTSessionDelegate sessionDidConnect:]>
+ * message is sent when your own client connects to the session.
+ *
+ * @param session The <OTSession> instance that sent this message.
+ * @param connection The new <OTConnection> object.
+ */
+- (void) session:(OTSession*) session didCreateConnection:(OTConnection*) connection;
+
+/**
+ * Sent when another client disconnects from the session. The `connection` object represents the connection
+ * that the client had to the session.
+ *
+ * This message is not sent when your own client disconnects from the session. The <[OTSessionDelegate sessionDidDisconnect:]>
+ * message is sent when your own client connects to the session.
+ *
+ * @param session The <OTSession> instance that sent this message.
+ * @param connection The <OTConnection> object for the client that disconnected from the session.
+ */
+- (void) session:(OTSession*) session didDropConnection:(OTConnection*) connection;
+
 
 @end
