@@ -10,6 +10,8 @@
 
 #define TABBAR_HEIGHT 49.0f
 #define TEXTFIELD_HEIGHT 70.0f
+#define MESSAGE_WIDTH 260
+#define MESSAGE_CURVE 15
 
 @interface RoomViewController (){
     NSString* userName;
@@ -106,7 +108,7 @@
     float diameter = 100.0;
     [publisher.view setFrame:CGRectMake( containerWidth-90, containerHeight-60, diameter, diameter)];
     publisher.view.layer.cornerRadius = diameter/2.0;
-    [videoContainerView addSubview:publisher.view];
+    [self.view addSubview:publisher.view];
     
     // add pan gesture to publisher
     UIPanGestureRecognizer *pgr = [[UIPanGestureRecognizer alloc]
@@ -195,7 +197,7 @@
 {
 }
 - (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer{
-    NSLog(@"I'm freaking panning the publisher!");
+    // user is panning publisher object
     CGPoint translation = [recognizer translationInView:publisher.view];
     recognizer.view.center = CGPointMake(recognizer.view.center.x + translation.x,
                                          recognizer.view.center.y + translation.y);
@@ -323,8 +325,8 @@
     
     NSDictionary* chatMessage = [chatData objectAtIndex:index.row];
     
-    // TODO: 260 comes from the width inside the storyboard
-    CGSize maximumLabelSize = CGSizeMake(260, FLT_MAX);
+    // set width of label
+    CGSize maximumLabelSize = CGSizeMake(MESSAGE_WIDTH, FLT_MAX);
     CGSize textSize = [chatMessage[@"text"] sizeWithFont:cell.textString.font constrainedToSize:maximumLabelSize lineBreakMode:cell.textString.lineBreakMode];
     
     // iOS6 and above : Use NSAttributedStrings
@@ -368,7 +370,7 @@
     
     CALayer * layer = [cell layer];
     layer.masksToBounds = YES;
-    layer.cornerRadius = newFrame.size.height/2;
+    layer.cornerRadius = MESSAGE_CURVE;
     
     return cell;
 }
@@ -384,7 +386,7 @@
     
     // TODO: there is some code duplication here. In particular, instead of asking the cell, the cell's settings from
     //       the storyboard are manually duplicated here (font, wrapping).
-    CGSize maximumLabelSize = CGSizeMake(260, FLT_MAX);
+    CGSize maximumLabelSize = CGSizeMake(MESSAGE_WIDTH, FLT_MAX);
     CGFloat expectedLabelHeight = [myString sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:maximumLabelSize lineBreakMode:NSLineBreakByWordWrapping].height;
     
     return pointsAboveText + expectedLabelHeight + pointsBelowText;
