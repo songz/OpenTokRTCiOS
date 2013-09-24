@@ -334,10 +334,6 @@
     
     NSDictionary* chatMessage = [chatData objectAtIndex:index.row];
     
-    if ([chatMessage[@"text"] length] >= 6) {
-        NSLog(@"array is %@", [chatMessage[@"text"] substringWithRange:NSMakeRange(0, 6)]);
-    }
-    
     // set width of label
     CGSize maximumLabelSize = CGSizeMake(MESSAGE_WIDTH, FLT_MAX);
     CGSize textSize = [chatMessage[@"text"] sizeWithFont:cell.textString.font constrainedToSize:maximumLabelSize lineBreakMode:cell.textString.lineBreakMode];
@@ -356,20 +352,26 @@
                            foregroundColor, NSForegroundColorAttributeName, nil];
     NSDictionary *subAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
                               regularFont, NSFontAttributeName, nil];
-    const NSRange range = NSMakeRange(0,[chatMessage[@"name"] length]+1); // range of " 2012/10/14 ". Ideally this should not be hardcoded
     
-
-    NSMutableString* cellText = [[NSMutableString alloc] initWithFormat:@"%@: %@", chatMessage[@"name"],chatMessage[@"text"]];
     
+    // check for server and user messages, style appropriately via attributes
+    if ( ([chatMessage[@"text"] length] >= 6) && ([[chatMessage[@"text"] substringWithRange:NSMakeRange(0, 6)] isEqualToString:@"/serv "]) ) {
+        NSMutableString* cellText = [[NSMutableString alloc] initWithFormat:@"%@", [chatMessage[@"text"] substringWithRange:NSMakeRange(6, [chatMessage[@"text"] length]-6)]];
+        cell.textString.attributedText = [[NSMutableAttributedString alloc] initWithString:cellText attributes:subAttrs];
+        cell.textString.textAlignment = NSTextAlignmentCenter;
+    }else{
+        const NSRange range = NSMakeRange(0,[chatMessage[@"name"] length]+1); // range of name
+        NSMutableString* cellText = [[NSMutableString alloc] initWithFormat:@"%@: %@", chatMessage[@"name"],chatMessage[@"text"]];
+        NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:cellText attributes:subAttrs];
+        
+        [attributedText setAttributes:attrs range:range];
+        cell.textString.attributedText = attributedText;
+        cell.textString.textAlignment = NSTextAlignmentLeft;
+    }
     
     // Create the attributed string (text + attributes)
-    NSMutableAttributedString *attributedText =
-    [[NSMutableAttributedString alloc] initWithString:cellText
-                                           attributes:subAttrs];
-    [attributedText setAttributes:attrs range:range];
     
     // set cell string ond style
-    cell.textString.attributedText = attributedText;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // adjust the label the the new height.
