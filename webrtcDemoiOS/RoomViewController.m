@@ -10,8 +10,9 @@
 
 #define TABBAR_HEIGHT 49.0f
 #define TEXTFIELD_HEIGHT 70.0f
-#define MESSAGE_WIDTH 260
-#define MESSAGE_CURVE 15
+#define MESSAGE_WIDTH 200
+#define MESSAGE_CURVE 0
+#define MESSAGE_FONTSIZE 13
 
 @interface RoomViewController (){
     NSString* userName;
@@ -38,7 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    set_ot_log_level(5);
+    //set_ot_log_level(5);
     
     // listen to keyboard events
     [self registerForKeyboardNotifications];
@@ -95,6 +96,14 @@
             [self setupRoom];
         }
     }];
+    
+    // Set background appearance
+    UIGraphicsBeginImageContext(videoContainerView.frame.size);
+    NSLog(@"width: %f, height: %f", videoContainerView.frame.size.width, videoContainerView.frame.size.height);
+    [[UIImage imageNamed:@"silhouetteman.jpg"] drawInRect:videoContainerView.bounds];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    videoContainerView.backgroundColor = [UIColor colorWithPatternImage:image];
 }
 
 
@@ -325,15 +334,21 @@
     
     NSDictionary* chatMessage = [chatData objectAtIndex:index.row];
     
+    if ([chatMessage[@"text"] length] >= 6) {
+        NSLog(@"array is %@", [chatMessage[@"text"] substringWithRange:NSMakeRange(0, 6)]);
+    }
+    
     // set width of label
     CGSize maximumLabelSize = CGSizeMake(MESSAGE_WIDTH, FLT_MAX);
     CGSize textSize = [chatMessage[@"text"] sizeWithFont:cell.textString.font constrainedToSize:maximumLabelSize lineBreakMode:cell.textString.lineBreakMode];
     
     // iOS6 and above : Use NSAttributedStrings
-    const CGFloat fontSize = 13;
+    const CGFloat fontSize = MESSAGE_FONTSIZE;
     UIFont *boldFont = [UIFont boldSystemFontOfSize:fontSize];
     UIFont *regularFont = [UIFont systemFontOfSize:fontSize];
-    UIColor *foregroundColor = [UIColor blackColor];
+    UIColor *foregroundColor = [UIColor colorWithRed:0xDD/255.0f
+                                               green:0xDD/255.0f
+                                                blue:0xDD/255.0f alpha:1];
     
     // Create the attributes
     NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -364,9 +379,7 @@
     cell.textString.numberOfLines = 0;
     
     //set cell background color
-    cell.backgroundColor = [UIColor colorWithRed:0x83/255.0f
-                                           green:0xBC/255.0f
-                                            blue:0xD0/255.0f alpha:1];
+    cell.backgroundColor = [UIColor clearColor];
     
     CALayer * layer = [cell layer];
     layer.masksToBounds = YES;
@@ -381,13 +394,13 @@
     NSString* myString = chatMessage[@"text"];
     
     // Without creating a cell, just calculate what its height would be
-    static int pointsAboveText = 12;
-    static int pointsBelowText = 12;
+    static int pointsAboveText = 10;
+    static int pointsBelowText = 10;
     
     // TODO: there is some code duplication here. In particular, instead of asking the cell, the cell's settings from
     //       the storyboard are manually duplicated here (font, wrapping).
     CGSize maximumLabelSize = CGSizeMake(MESSAGE_WIDTH, FLT_MAX);
-    CGFloat expectedLabelHeight = [myString sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:maximumLabelSize lineBreakMode:NSLineBreakByWordWrapping].height;
+    CGFloat expectedLabelHeight = [myString sizeWithFont:[UIFont systemFontOfSize:MESSAGE_FONTSIZE] constrainedToSize:maximumLabelSize lineBreakMode:NSLineBreakByWordWrapping].height;
     
     return pointsAboveText + expectedLabelHeight + pointsBelowText;
 }
