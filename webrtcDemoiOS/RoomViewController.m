@@ -31,6 +31,7 @@
 
 @end
 
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
 @implementation RoomViewController
 
@@ -68,7 +69,9 @@
     // set up look of the page
     [self.navigationController setNavigationBarHidden:YES];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"TBBlue.png"]];
-    [self setNeedsStatusBarAppearanceUpdate];
+    if (!SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        [self setNeedsStatusBarAppearanceUpdate];
+    }
 }
 
 - (void)viewDidUnload{

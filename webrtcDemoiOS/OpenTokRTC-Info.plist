@@ -10,16 +10,11 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
+		<string>Icon-80</string>
+		<string>Icon-29x29</string>
 		<string>Icon-114</string>
 		<string>Icon-57</string>
-		<string>Icon-58</string>
-		<string>Icon-29.png</string>
-		<string>Icon-40.png</string>
-		<string>Icon-60.png</string>
-		<string>Icon-76.png</string>
-		<string>Icon-120@2x.png</string>
-		<string>Icon-152@2x.png</string>
-		<string>Icon-80@2x.png</string>
+		<string>Icon-120</string>
 	</array>
 	<key>CFBundleIdentifier</key>
 	<string>com.tokbox.${PRODUCT_NAME:rfc1034identifier}</string>

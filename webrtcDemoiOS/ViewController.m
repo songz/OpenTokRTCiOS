@@ -14,6 +14,8 @@
 
 @end
 
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+
 @implementation ViewController
 
 @synthesize RoomName, appTitle, buttonName, hintLabel;
@@ -41,7 +43,10 @@
     // set up the look of the page
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"TBRed.png"]];
     [self.navigationController setNavigationBarHidden:YES];
-    [self setNeedsStatusBarAppearanceUpdate];
+    if (!SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+      [self setNeedsStatusBarAppearanceUpdate];
+    }
+    
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle{

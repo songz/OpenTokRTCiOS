@@ -152,12 +152,9 @@
                                 </connections>
                             </textField>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="170" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="A65-hj-7fN">
-                                <rect key="frame" x="20" y="265" width="274" height="236"/>
+                                <rect key="frame" x="23" y="265" width="274" height="236"/>
                                 <color key="backgroundColor" red="0.51372549019607838" green="0.73725490196078436" blue="0.81568627450980391" alpha="0.0" colorSpace="deviceRGB"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="236" id="Csk-ua-dVO"/>
-                                </constraints>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="chatCellIdentifier" rowHeight="170" id="l6Z-Ex-1WE" customClass="ChatCell">
                                         <rect key="frame" x="0.0" y="22" width="274" height="170"/>
@@ -243,19 +240,21 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="A65-hj-7fN" secondAttribute="trailing" constant="26" id="1mr-Zf-aWB"/>
+                            <constraint firstAttribute="trailing" secondItem="A65-hj-7fN" secondAttribute="trailing" constant="23" id="1mr-Zf-aWB"/>
                             <constraint firstItem="yOA-PE-9Bd" firstAttribute="bottom" secondItem="GTG-X7-mdD" secondAttribute="bottom" id="3LV-ww-8Mg"/>
                             <constraint firstItem="WM3-i0-kL3" firstAttribute="trailing" secondItem="GTG-X7-mdD" secondAttribute="trailing" id="BVi-wq-7W7"/>
                             <constraint firstItem="3wS-jW-XvE" firstAttribute="top" secondItem="GTG-X7-mdD" secondAttribute="top" constant="20" symbolic="YES" id="DG3-AN-9LT"/>
                             <constraint firstItem="yOA-PE-9Bd" firstAttribute="top" secondItem="GTG-X7-mdD" secondAttribute="top" id="Fua-sH-UUV"/>
+                            <constraint firstAttribute="bottom" secondItem="A65-hj-7fN" secondAttribute="bottom" constant="67" id="HA6-HU-FM7"/>
                             <constraint firstItem="fac-2Z-lf2" firstAttribute="leading" secondItem="GTG-X7-mdD" secondAttribute="leading" constant="20" symbolic="YES" id="IFz-XF-uup"/>
+                            <constraint firstAttribute="bottom" secondItem="LIY-NU-Dbw" secondAttribute="bottom" constant="18" id="IwR-oM-SQ0"/>
                             <constraint firstItem="WM3-i0-kL3" firstAttribute="leading" secondItem="GTG-X7-mdD" secondAttribute="leading" id="J6H-Fa-TUf"/>
                             <constraint firstAttribute="bottom" secondItem="mYH-dv-e4a" secondAttribute="bottom" constant="130" id="Jfk-xG-RhT"/>
                             <constraint firstItem="A65-hj-7fN" firstAttribute="top" secondItem="fac-2Z-lf2" secondAttribute="bottom" id="MAB-00-0lk"/>
                             <constraint firstItem="mYH-dv-e4a" firstAttribute="centerX" secondItem="LIY-NU-Dbw" secondAttribute="centerX" id="Oe3-Bm-mas"/>
                             <constraint firstItem="WM3-i0-kL3" firstAttribute="top" secondItem="GTG-X7-mdD" secondAttribute="top" constant="139" id="RoJ-Ya-ru0"/>
                             <constraint firstItem="7Ov-IT-lrX" firstAttribute="top" secondItem="GTG-X7-mdD" secondAttribute="top" constant="20" symbolic="YES" id="TGj-Vu-N1z"/>
-                            <constraint firstItem="A65-hj-7fN" firstAttribute="leading" secondItem="GTG-X7-mdD" secondAttribute="leading" constant="20" id="VLx-Uo-jqW"/>
+                            <constraint firstItem="A65-hj-7fN" firstAttribute="leading" secondItem="GTG-X7-mdD" secondAttribute="leading" constant="23" id="VLx-Uo-jqW"/>
                             <constraint firstItem="fac-2Z-lf2" firstAttribute="top" secondItem="GTG-X7-mdD" secondAttribute="top" constant="72" id="aZh-12-OI9"/>
                             <constraint firstItem="3wS-jW-XvE" firstAttribute="leading" secondItem="GTG-X7-mdD" secondAttribute="leading" constant="20" symbolic="YES" id="fRx-6s-75W"/>
                             <constraint firstAttribute="trailing" secondItem="LIY-NU-Dbw" secondAttribute="trailing" constant="20" symbolic="YES" id="kPg-Ax-ylr"/>
@@ -265,7 +264,6 @@
                             <constraint firstAttribute="trailing" secondItem="7Ov-IT-lrX" secondAttribute="trailing" constant="20" symbolic="YES" id="opY-8t-6ET"/>
                             <constraint firstItem="yOA-PE-9Bd" firstAttribute="leading" secondItem="GTG-X7-mdD" secondAttribute="leading" id="rWR-rP-Bys"/>
                             <constraint firstAttribute="trailing" secondItem="fac-2Z-lf2" secondAttribute="trailing" constant="20" symbolic="YES" id="t0d-WV-3Ma"/>
-                            <constraint firstItem="LIY-NU-Dbw" firstAttribute="top" secondItem="A65-hj-7fN" secondAttribute="bottom" constant="19" id="tNT-n5-nlq"/>
                             <constraint firstItem="A65-hj-7fN" firstAttribute="top" secondItem="GTG-X7-mdD" secondAttribute="top" constant="265" id="tom-w4-jFX"/>
                             <constraint firstItem="yOA-PE-9Bd" firstAttribute="trailing" secondItem="GTG-X7-mdD" secondAttribute="trailing" id="tz6-Af-e5n"/>
                         </constraints>
