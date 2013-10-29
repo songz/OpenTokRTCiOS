@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		92C3D0F617E2398D00C0AFE1 /* Opentok.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E409160217E233C300346C2F /* Opentok.framework */; };
-		92C3D0F717E2399800C0AFE1 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E409160017E233BB00346C2F /* Firebase.framework */; };
 		92C3D0FB17E23E2000C0AFE1 /* opentok.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 92C3D0FA17E23E2000C0AFE1 /* opentok.bundle */; };
 		E423F47F17BC4D48007F17DF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F47E17BC4D48007F17DF /* UIKit.framework */; };
 		E423F48117BC4D48007F17DF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E423F48017BC4D48007F17DF /* Foundation.framework */; };
@@ -58,6 +56,7 @@
 		E48A137D17F3AE7000259FBE /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = E48A136F17F3AE7000259FBE /* iTunesArtwork.png */; };
 		E48A137E17F3AE7000259FBE /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E48A137017F3AE7000259FBE /* iTunesArtwork@2x.png */; };
 		E48BEA2417F2324E0082ACB1 /* silhouetteman.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E48BEA2317F2324E0082ACB1 /* silhouetteman.jpg */; };
+		E49688AF1820480C007DB53D /* Opentok.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E409160217E233C300346C2F /* Opentok.framework */; };
 		E4A4641117DC2A3300AA4FE9 /* AvantGarDemObl in Resources */ = {isa = PBXBuildFile; fileRef = E4A4641017DC2A3300AA4FE9 /* AvantGarDemObl */; };
 		E4EA156217DC31E40069B603 /* Avant Garde Book BT.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4EA156117DC31E40069B603 /* Avant Garde Book BT.ttf */; };
 		E4EA156317DC874E0069B603 /* Avant Garde Book BT.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4EA156117DC31E40069B603 /* Avant Garde Book BT.ttf */; };
@@ -77,7 +76,6 @@
 
 /* Begin PBXFileReference section */
 		92C3D0FA17E23E2000C0AFE1 /* opentok.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = opentok.bundle; path = Opentok.framework/Versions/A/Resources/opentok.bundle; sourceTree = SOURCE_ROOT; };
-		E409160017E233BB00346C2F /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
 		E409160217E233C300346C2F /* Opentok.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Opentok.framework; sourceTree = "<group>"; };
 		E423F47B17BC4D48007F17DF /* OpenTokRTC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenTokRTC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E423F47E17BC4D48007F17DF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -146,8 +144,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92C3D0F717E2399800C0AFE1 /* Firebase.framework in Frameworks */,
-				92C3D0F617E2398D00C0AFE1 /* Opentok.framework in Frameworks */,
+				E49688AF1820480C007DB53D /* Opentok.framework in Frameworks */,
 				E423F4DC17BC4EDA007F17DF /* libicucore.dylib in Frameworks */,
 				E423F47F17BC4D48007F17DF /* UIKit.framework in Frameworks */,
 				E423F48117BC4D48007F17DF /* Foundation.framework in Frameworks */,
@@ -205,7 +202,6 @@
 			isa = PBXGroup;
 			children = (
 				E409160217E233C300346C2F /* Opentok.framework */,
-				E409160017E233BB00346C2F /* Firebase.framework */,
 				E423F4B917BC4DE2007F17DF /* CoreTelephony.framework */,
 				E423F4BA17BC4DE2007F17DF /* MobileCoreServices.framework */,
 				E423F4BB17BC4DE2007F17DF /* CFNetwork.framework */,
@@ -570,7 +566,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Song ZHENG (Q8LHUPHAD8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Song ZHENG (Q8LHUPHAD8)";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)",
+					/Users/song/CloudStorage/Dropbox/Tokbox/Code/demos/webrtcDemoiOS,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "webrtcDemoiOS/OpenTokRTC-Prefix.pch";
 				INFOPLIST_FILE = "webrtcDemoiOS/OpenTokRTC-Info.plist";
@@ -585,7 +584,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Song ZHENG (Q8LHUPHAD8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Song ZHENG (Q8LHUPHAD8)";
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)",
+					/Users/song/CloudStorage/Dropbox/Tokbox/Code/demos/webrtcDemoiOS,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "webrtcDemoiOS/OpenTokRTC-Prefix.pch";
 				INFOPLIST_FILE = "webrtcDemoiOS/OpenTokRTC-Info.plist";

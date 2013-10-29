@@ -94,7 +94,7 @@
         [RoomName resignFirstResponder];
         
         RoomViewController *vc = [segue destinationViewController];
-        vc.rid = [[RoomName text] stringByReplacingOccurrencesOfString:@" " withString:@""];;
+        vc.rid = [[RoomName text] stringByReplacingOccurrencesOfString:@" " withString:@""];
     }
 }
 

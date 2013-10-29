@@ -22,11 +22,9 @@
     NSMutableArray* connections;
     OTSession* _session;
     OTPublisher* publisher;
-    
     OTSubscriber* _subscriber;
-    Firebase* presenceRef;
-    Firebase* chatRef;
-    Firebase* usersRef;
+    
+    BOOL initialized;
 }
 
 @end
@@ -50,16 +48,12 @@
     allStreams = [[NSMutableDictionary alloc] init];
     connections= [[NSMutableArray alloc] init];
     chatData = [[NSMutableArray alloc] init];
+    initialized = NO;
     
     // add subviews to stream picker for user to pick streams to subscribe to
     [usersPickerView addSubview:myPickerView];
     [usersPickerView addSubview:selectUserButton];
     [usersPickerView setAlpha:0.0];
-    
-    // generate current user's name
-    NSDate* date = [NSDate date];
-    userName = [[NSString alloc] initWithFormat:@"iOS-%d", (int)[date timeIntervalSince1970] % 1000000];
-    [userSelectButton.titleLabel setText: userName];
     
     // listen to taps around the screen, and hide keyboard when necessary
     UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
@@ -110,6 +104,14 @@
 }
 
 
+- (void) scrollChatTable{
+    if (chatTable.contentSize.height > chatTable.frame.size.height){
+        CGPoint offset = CGPointMake(0, chatTable.contentSize.height - chatTable.frame.size.height);
+        [chatTable setContentOffset:offset animated:YES];
+    }
+}
+
+
 - (void) setupRoom {
     // get screen bounds
     CGFloat containerWidth = CGRectGetWidth( videoContainerView.bounds );
@@ -135,60 +137,38 @@
     NSLog(@"room info: %@", roomInfo);
     NSLog(@"room info: %@", roomInfo);
     _session = [[OTSession alloc] initWithSessionId: [roomInfo objectForKey:@"sid"] delegate:self];
-    [_session connectWithApiKey: [roomInfo objectForKey:@"apiKey"] token:[roomInfo objectForKey:@"token"]];
-    
-    // Define firebase refs
-    NSString* roomUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/", rid];
-    Firebase* roomRef = [[Firebase alloc] initWithUrl: roomUrl];
-    NSString* chatUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/chat/", rid];
-    chatRef = [[Firebase alloc] initWithUrl: chatUrl];
-    NSString* usersUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/users/", rid];
-    usersRef = [[Firebase alloc] initWithUrl: usersUrl];
-    
-    // make sure firebase room reference has a session id
-    [[roomRef childByAppendingPath:@"sid"] setValue: [roomInfo objectForKey:@"sid"]];
-    
-    // new chat messages
-    [chatRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        // Add the chat message to the array.
-        [chatData addObject:snapshot.value];
+    [_session receiveSignalType:@"initialize" withHandler:^(NSString *type, id data, OTConnection *fromConnection) {
+        if (initialized) {
+            return;
+        }
+        NSDictionary* roomData = (NSDictionary* ) data;
+        NSLog(@"Room filter: %@", [roomData valueForKey:@"filter"]);
         
-        // Reload the table view so the new message will show up.
+        // set room users
+        NSDictionary* roomDataUsers = (NSDictionary* ) [roomData valueForKey:@"users"];
+        for (id key in roomDataUsers) {
+            [roomUsers setValue:[roomDataUsers objectForKey:key] forKey:key];
+        }
+        // set room chat info
+        for (id key in (NSArray* )[roomData valueForKey:@"chat"]) {
+            [chatData addObject: (NSDictionary* )key ];
+            [chatTable reloadData];
+        }
+        initialized = YES;
+        [self scrollChatTable];
+    }];
+    [_session receiveSignalType:@"chat" withHandler:^(NSString *type, id data, OTConnection *fromConnection) {
+        [chatData addObject: (NSDictionary* ) data ];
         [chatTable reloadData];
-        
-        // scroll down chat table if content is longer than view
-        if (chatTable.contentSize.height > chatTable.frame.size.height){
-            CGPoint offset = CGPointMake(0, chatTable.contentSize.height - chatTable.frame.size.height);
-            [chatTable setContentOffset:offset animated:YES];
-        }
+        [self scrollChatTable];
+    }];
+    [_session receiveSignalType:@"name" withHandler:^(NSString *type, id data, OTConnection *fromConnection) {
+        NSArray* nameData = (NSArray* ) data;
+        [roomUsers setObject:[nameData objectAtIndex:1] forKey:[nameData objectAtIndex:0]];
     }];
     
-    // new user has joined the room
-    [usersRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot){
-        NSString* name = [[snapshot childSnapshotForPath:@"name"] value];
-        NSString* cid = [snapshot name];
-        if(cid){
-            [roomUsers setValue:name forKey:cid];
-        }
-    }];
-    
-    // users have left the room
-    [usersRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot){
-        NSString* name = [snapshot name];
-        [roomUsers removeObjectForKey: name];
-    }];
-    
-    // user's name has changed
-    [usersRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot){
-        NSString* name = [[snapshot childSnapshotForPath:@"name"] value];
-        NSString* cid = [snapshot name];
-        if(cid){
-            [roomUsers setValue:name forKey:cid];
-            [myPickerView reloadAllComponents];
-            NSLog(@"child changed: %@", roomUsers);
-        }
-    }];
-    
+    // Add session event listeners
+    [_session connectWithApiKey: [roomInfo objectForKey:@"apiKey"] token:[roomInfo objectForKey:@"token"]];
 }
 
 
@@ -219,23 +199,28 @@
 
 
 #pragma mark - OpenTok Session
+- (void)session:(OTSession*)mySession didCreateConnection:(OTConnection *)connection{
+    if (![roomUsers objectForKey:connection.connectionId]) {
+        NSString* guestName = [[NSString alloc] initWithFormat:@"Guest-%@", [connection.connectionId substringFromIndex: (connection.connectionId.length - 8)] ];
+        [roomUsers setObject: guestName forKey:connection.connectionId];
+    }
+    NSLog(@"addConnection: %@", roomUsers);
+}
+- (void)session:(OTSession*)mySession didDropConnection:(OTConnection *)connection{
+    [roomUsers removeObjectForKey: connection.connectionId];
+    NSLog(@"dropConnection: %@", roomUsers);
+}
+
 - (void)sessionDidConnect:(OTSession*)session
 {
-    // set user's presence in the room and publish video into session
-    NSString* presenceUrl = [[NSString alloc] initWithFormat:@"https://rtcdemo.firebaseIO.com/room/%@/users/%@", rid, session.connection.connectionId];
-    presenceRef = [[Firebase alloc] initWithUrl: presenceUrl];
-    [[presenceRef childByAppendingPath:@"name"] setValue: userName];
-    [presenceRef onDisconnectRemoveValue];
-    
+    userName = [[NSString alloc] initWithFormat:@"Guest-%@", [_session.connection.connectionId substringFromIndex: (_session.connection.connectionId.length - 8)] ];
+    [roomUsers setObject:userName forKey:_session.connection.connectionId];
+    [userSelectButton.titleLabel setText: userName];
     [_session publish:publisher];
 }
 
 - (void)sessionDidDisconnect:(OTSession*)session
 {
-    // go back to join room, remove user's presence from room
-    [usersRef removeAllObservers];
-    [chatRef removeAllObservers];
-    [presenceRef removeValue];
     _subscriber = NULL;
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -289,6 +274,12 @@
     // leave room
     [self.navigationController popViewControllerAnimated:YES];
 }
+- (void)subscriber:(OTSubscriber *)subscriber didFailWithError:(OTError *)error{
+    NSLog(@"subscriber could not connect to stream");
+}
+- (void)subscriberDidConnectToStream:(OTSubscriber *)subscriber{
+    NSLog(@"subscriber has successfully connected to stream");
+}
 
 #pragma mark - Helper Methods
 - (void)showAlert:(NSString*)string {
@@ -316,10 +307,9 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (chatInput.text.length>0) {
+    if (chatInput.text.length>0 && userName) {
         // Generate a reference to a new location with childByAutoId, add chat
-        Firebase* newPushRef = [chatRef childByAutoId];
-        [newPushRef setValue:@{@"name":userName ,@"text": textField.text}];
+        [_session signalWithType:@"chat" data:@{@"name":userName ,@"text": textField.text} completionHandler:^(NSError* error){}];
         chatInput.text = @"";
     }
     return NO;

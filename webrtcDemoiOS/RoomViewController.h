@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Firebase/Firebase.h>
 #import <Opentok/Opentok.h>
 #import "ChatCell.h"
 #import <QuartzCore/QuartzCore.h>
